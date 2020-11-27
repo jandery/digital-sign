@@ -21,13 +21,4 @@ abstract class AbstractSigning(private val privateKey: PrivateKey) : ISigning {
         File("$filePath.private").writeBytes(privateKey.encoded)
     }
 
-
-    companion object {
-
-        internal fun validateSignature(algorithm: String, publicKey: PublicKey, stringToValidate: String, signature: ByteArray): Boolean =
-                Signature.getInstance(algorithm)
-                        .also { it.initVerify(publicKey) }
-                        .also { it.update(stringToValidate.toByteArray()) }
-                        .verify(signature)
-    }
 }
