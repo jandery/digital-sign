@@ -8,18 +8,18 @@ class RsaTest {
 
     private val stringToSign = "This is a string to sign"
 
-    private val firstKeyPair = RsaSigning.generate()
-    private val secondKeyPair = RsaSigning.generate()
+    private val firstKeyPair = AlgorithmEnum.RSA.generate()
+    private val secondKeyPair = AlgorithmEnum.RSA.generate()
 
     @Test
     fun `validate signature, use same public key, true`() {
         val signature = firstKeyPair.createSignature(stringToSign)
-        Assertions.assertTrue(RsaSigning.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
+        Assertions.assertTrue(RsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
     }
 
     @Test
     fun `validate signature, use different public key, false`() {
         val signature = secondKeyPair.createSignature(stringToSign)
-        Assertions.assertFalse(RsaSigning.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
+        Assertions.assertFalse(RsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
     }
 }

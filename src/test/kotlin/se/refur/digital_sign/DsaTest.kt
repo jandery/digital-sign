@@ -8,18 +8,18 @@ class DsaTest {
 
     private val stringToSign = "This is a string to sign"
 
-    private val firstKeyPair = DsaSigning.generate()
-    private val secondKeyPair = DsaSigning.generate()
+    private val firstKeyPair = AlgorithmEnum.DSA.generate()
+    private val secondKeyPair = AlgorithmEnum.RSA.generate()
 
     @Test
     fun `validate signature, use same public key, true`() {
         val signature = firstKeyPair.createSignature(stringToSign)
-        Assertions.assertTrue(DsaSigning.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
+        Assertions.assertTrue(DsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
     }
 
     @Test
     fun `validate signature, use different public key, false`() {
         val signature = secondKeyPair.createSignature(stringToSign)
-        Assertions.assertFalse(DsaSigning.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
+        Assertions.assertFalse(DsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
     }
 }
