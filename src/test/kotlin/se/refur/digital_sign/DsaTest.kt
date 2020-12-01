@@ -9,7 +9,7 @@ class DsaTest {
     private val stringToSign = "This is a string to sign"
 
     private val firstKeyPair = AlgorithmEnum.DSA.generate()
-    private val secondKeyPair = AlgorithmEnum.RSA.generate()
+    private val secondKeyPair = AlgorithmEnum.DSA.generate()
 
     @Test
     fun `validate signature, use same public key, true`() {
@@ -21,5 +21,20 @@ class DsaTest {
     fun `validate signature, use different public key, false`() {
         val signature = secondKeyPair.createSignature(stringToSign)
         Assertions.assertFalse(DsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
+    }
+
+    @Test
+    fun `validate signature, read from file with matching key set, true `() {
+        val dsaFirst = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_FIRST.getFullPath())
+        val signature = dsaFirst.createSignature(stringToSign)
+        Assertions.assertTrue(DsaImpl.validateSignature(dsaFirst.publicKey, stringToSign, signature))
+    }
+
+    @Test
+    fun `validate signature, read from file with different key set, false`() {
+        val dsaFirst = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_FIRST.getFullPath())
+        val dsaSecond = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_SECOND.getFullPath())
+        val signature = dsaFirst.createSignature(stringToSign)
+        Assertions.assertFalse(DsaImpl.validateSignature(dsaSecond.publicKey, stringToSign, signature))
     }
 }

@@ -22,4 +22,19 @@ class RsaTest {
         val signature = secondKeyPair.createSignature(stringToSign)
         Assertions.assertFalse(RsaImpl.validateSignature(firstKeyPair.publicKey, stringToSign, signature))
     }
+
+    @Test
+    fun `validate signature, read from file with matching key set, true `() {
+        val rsaFirst = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_FIRST.getFullPath())
+        val signature = rsaFirst.createSignature(stringToSign)
+        Assertions.assertTrue(RsaImpl.validateSignature(rsaFirst.publicKey, stringToSign, signature))
+    }
+
+    @Test
+    fun `validate signature, read from file with different key set, false`() {
+        val rsaFirst = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_FIRST.getFullPath())
+        val rsaSecond = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_SECOND.getFullPath())
+        val signature = rsaFirst.createSignature(stringToSign)
+        Assertions.assertFalse(RsaImpl.validateSignature(rsaSecond.publicKey, stringToSign, signature))
+    }
 }
