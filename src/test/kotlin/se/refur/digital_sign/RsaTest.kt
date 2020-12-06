@@ -37,4 +37,19 @@ class RsaTest {
         val signature = rsaFirst.createSignature(stringToSign)
         Assertions.assertFalse(RsaImpl.validateSignature(rsaSecond.publicKey, stringToSign, signature))
     }
+
+    @Test
+    fun `validate base64 signature, read from file with matching key set, true `() {
+        val rsaFirst = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_FIRST.getFullPath())
+        val signature = rsaFirst.createBase64Signature(stringToSign)
+        Assertions.assertTrue(RsaImpl.validateBase64Signature(rsaFirst.publicKey, stringToSign, signature))
+    }
+
+    @Test
+    fun `validate base64 signature, read from file with different key set, false`() {
+        val rsaFirst = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_FIRST.getFullPath())
+        val rsaSecond = AlgorithmEnum.RSA.readFromFile(ResourceReader.RSA_SECOND.getFullPath())
+        val signature = rsaFirst.createBase64Signature(stringToSign)
+        Assertions.assertFalse(RsaImpl.validateBase64Signature(rsaSecond.publicKey, stringToSign, signature))
+    }
 }

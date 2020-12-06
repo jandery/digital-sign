@@ -37,4 +37,19 @@ class DsaTest {
         val signature = dsaFirst.createSignature(stringToSign)
         Assertions.assertFalse(DsaImpl.validateSignature(dsaSecond.publicKey, stringToSign, signature))
     }
+
+    @Test
+    fun `validate base64 signature, read from file with matching key set, true `() {
+        val dsaFirst = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_FIRST.getFullPath())
+        val signature = dsaFirst.createBase64Signature(stringToSign)
+        Assertions.assertTrue(DsaImpl.validateBase64Signature(dsaFirst.publicKey, stringToSign, signature))
+    }
+
+    @Test
+    fun `validate base64 signature, read from file with different key set, false`() {
+        val dsaFirst = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_FIRST.getFullPath())
+        val dsaSecond = AlgorithmEnum.DSA.readFromFile(ResourceReader.DSA_SECOND.getFullPath())
+        val signature = dsaFirst.createBase64Signature(stringToSign)
+        Assertions.assertFalse(DsaImpl.validateBase64Signature(dsaSecond.publicKey, stringToSign, signature))
+    }
 }

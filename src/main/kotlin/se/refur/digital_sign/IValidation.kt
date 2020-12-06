@@ -17,6 +17,9 @@ interface IValidation {
                     .also { it.update(stringToValidate.toByteArray()) }
                     .verify(signature)
 
+    fun validateBase64Signature(publicKey: Any, stringToValidate: String, signature: String): Boolean =
+            validateSignature(publicKey, stringToValidate, Base64.getDecoder().decode(signature))
+
 
     private fun castKey(publicKey: Any): PublicKey = when (publicKey) {
         is PublicKey -> publicKey

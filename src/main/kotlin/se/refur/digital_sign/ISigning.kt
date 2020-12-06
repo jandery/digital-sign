@@ -1,6 +1,7 @@
 package se.refur.digital_sign
 
 import java.security.PublicKey
+import java.util.*
 
 
 /**
@@ -11,6 +12,9 @@ interface ISigning {
     val publicKey: PublicKey
 
     fun createSignature(stringToSign: String): ByteArray
+
+    fun createBase64Signature(stringToSign: String): String =
+            Base64.getEncoder().encodeToString(createSignature(stringToSign))
 }
 
 
